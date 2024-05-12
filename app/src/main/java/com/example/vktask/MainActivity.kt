@@ -4,15 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.remember
-import androidx.compose.ui.text.toLowerCase
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.vktask.data.pokemon.Pokemon
-import com.example.vktask.presentation.PokemonDetailScreen
-import com.example.vktask.presentation.PokemonListScreen
+import com.example.vktask.presentation.detail_screen.PokemonDetailScreen
+import com.example.vktask.presentation.list_screen.PokemonListScreen
 import com.example.vktask.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
