@@ -3,45 +3,48 @@ package com.example.vktask
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.vktask.ui.theme.VkTaskTheme
+import androidx.compose.runtime.remember
+import androidx.compose.ui.text.toLowerCase
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.vktask.data.pokemon.Pokemon
+import com.example.vktask.presentation.PokemonDetailScreen
+import com.example.vktask.presentation.PokemonListScreen
+import com.example.vktask.ui.theme.AppTheme
+import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        //enableEdgeToEdge()
         setContent {
-            VkTaskTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+            AppTheme {
+                val navController = rememberNavController()
+                NavHost(navController = navController, startDestination = "all_pokemon_screen") {
+                    composable("all_pokemon_screen") {
+                        PokemonListScreen(navController = navController)
+                    }
+                    composable(
+                        "selected_pokemon_screen/{name}",
+                        arguments = listOf(
+                            navArgument("name") {
+                                type = NavType.StringType
+                                this.defaultValue = "Pikachu"
+                            }
+                        )
+                    ) {
+                        val name = remember {
+                            it.arguments?.getString("name")
+                        }
+                        PokemonDetailScreen(pokemonName = name?.lowercase(Locale.ROOT) ?: "", navController = navController)
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    VkTaskTheme {
-        Greeting("Android")
     }
 }
